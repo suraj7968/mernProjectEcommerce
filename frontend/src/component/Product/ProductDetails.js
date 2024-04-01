@@ -8,7 +8,7 @@ import ReactStars from "react-rating-stars-component";
 import ReviewCard from "./ReviewCard.js";
 import Loader from "../layout/Loader/Loader.js";
 import { useAlert } from "react-alert";
-
+import MetaData from "../layout/MetaData.js";
 
 const ProductDetails = () => {
   const { id } = useParams(); // Use useParams to get route parameters
@@ -21,11 +21,11 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (error) {
-       alert.error(error);
-       dispatch(clearErrors())
+      alert.error(error);
+      dispatch(clearErrors());
     }
     dispatch(getProductDetails(id)); // Use the id obtained from useParams
-  }, [dispatch, id,error,alert]); // Include id in the dependency array
+  }, [dispatch, id, error, alert]); // Include id in the dependency array
 
   const options = {
     edit: false,
@@ -36,71 +36,71 @@ const ProductDetails = () => {
     isHalf: true,
   };
   console.log(product.ratings);
-  
 
   return (
     <Fragment>
-      {loading? <Loader/> : (<Fragment>
-      <div className="ProductDetails">
-        <div>
-            {product.images &&
-              product.images.map((item, i) => (
-                <img
-                  className="CarouselImage"
-                  key={i}
-                  src={item.url}
-                  alt={`${i} Slide`}
-                />
-              ))}
-        </div>
-        <div>
-          <div className="detailsBlock-1">
-            <h2>{product.name}</h2>
-            <p>Product #{product._id}</p>
-          </div>
-          <div className="detailsBlock-2">
-            <ReactStars {...options} />
-            <span>({product.numOfReviews} Reviews)</span>
-          </div>
-          <div className="detailsBlock-3">
-            <h1>{`${product.price}`}</h1>
-            <div className="detailsBlock-3-1">
-              <div className="detailsBlock-3-1-1">
-                <button>-</button>
-                <input type="number" value="1" />
-                <button>+</button>
-              </div>
-              <button>Add To Cart</button>
+      <MetaData title={`${product.name}-- ECOMMERCE`} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <Fragment>
+          <div className="ProductDetails">
+            <div>
+              {product.images &&
+                product.images.map((item, i) => (
+                  <img
+                    className="CarouselImage"
+                    key={i}
+                    src={item.url}
+                    alt={`${i} Slide`}
+                  />
+                ))}
             </div>
-            <p>
-              Status:{" "}
-              <b className={product.Stock < 1 ? "redColor" : "greenColor"}>
+            <div>
+              <div className="detailsBlock-1">
+                <h2>{product.name}</h2>
+                <p>Product #{product._id}</p>
+              </div>
+              <div className="detailsBlock-2">
+                <ReactStars {...options} />
+                <span>({product.numOfReviews} Reviews)</span>
+              </div>
+              <div className="detailsBlock-3">
+                <h1>{`${product.price}`}</h1>
+                <div className="detailsBlock-3-1">
+                  <div className="detailsBlock-3-1-1">
+                    <button>-</button>
+                    <input type="number" value="1" />
+                    <button>+</button>
+                  </div>
+                  <button>Add To Cart</button>
+                </div>
+                <p>
+                  Status:{" "}
+                  <b className={product.Stock < 1 ? "redColor" : "greenColor"}>
                     {product.Stock < 1 ? "OutOfStock" : "InStock"}
                   </b>
-            </p>
+                </p>
+              </div>
+              <div className="detailsBlock-4">
+                Description : <p>{product.description}</p>
+              </div>
+              <button className="submitReview">Submit Review</button>
+            </div>
           </div>
-          <div className="detailsBlock-4">
-          Description : <p>{product.description}</p>
-          </div>
-          <button className="submitReview">
-                Submit Review
-              </button>
-        </div>
-      </div>
-      <h3 className="reviewsHeading">REVIEWS</h3>
-      {product.reviews && product.reviews[0] ? (
-        <div className="reviews">
-        {product.reviews &&
-          product.reviews.map((review) => (
-            <ReviewCard key={review._id} review={review} />
-          ))}
-      </div>
-      ) : (
-        <p className="noReviews">No Reviews Yet</p>
-      )
-    }
-    </Fragment>)
-    }
+          <h3 className="reviewsHeading">REVIEWS</h3>
+          {product.reviews && product.reviews[0] ? (
+            <div className="reviews">
+              {product.reviews &&
+                product.reviews.map((review) => (
+                  <ReviewCard key={review._id} review={review} />
+                ))}
+            </div>
+          ) : (
+            <p className="noReviews">No Reviews Yet</p>
+          )}
+        </Fragment>
+      )}
     </Fragment>
   );
 };
