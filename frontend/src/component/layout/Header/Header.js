@@ -132,7 +132,7 @@ const navigation = {
     },
   ],
   pages: [
-    { name: "Product", href: "/product" },
+    { name: "Product", href: "/products" },
     { name: "Contact", href: "/contact" },
     { name: "About", href: "/about" },
   ],
@@ -342,7 +342,7 @@ export default function Example() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <a href="/">
                   <span className="sr-only">Your Company</span>
                   <img
                     className="h-8 w-auto"
@@ -510,7 +510,7 @@ export default function Example() {
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                  <a href="/search" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon
                       className="h-6 w-6"
