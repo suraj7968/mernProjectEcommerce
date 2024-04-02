@@ -8,8 +8,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearErrors, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const LoginSignUp = ({ history }) => {
+const LoginSignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const alert = useAlert();

@@ -12,12 +12,18 @@ import store from "./store.js";
 import { loadUser } from "./actions/userAction";
 import UserOptions from "./component/layout/Header/UserOptions";
 import { useSelector } from "react-redux";
+import Profile from "./component/User/Profile";
+import UpdateProfile from "./component/User/UpdateProfile";
+import UpdatePassword from "./component/User/UpdatePassword";
+import ForgotPassword from "./component/User/ForgotPassword";
+import ResetPassword from "./component/User/ResetPassword.js";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
+
   return (
     <div>
       <Router>
@@ -29,7 +35,23 @@ function App() {
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/products/:keyword" element={<Products />} />
           <Route exact path="/search" element={<Search />} />
+          {isAuthenticated && (
+            <Route exact path="/account" element={<Profile />} />
+          )}
           <Route exact path="/login" element={<LoginSignUp />} />
+          {isAuthenticated && (
+            <Route exact path="/me/update" element={<UpdateProfile />} />
+          )}
+          {isAuthenticated && (
+            <Route exact path="/password/update" element={<UpdatePassword />} />
+          )}
+
+          <Route exact path="/password/forgot" element={<ForgotPassword />} />
+          <Route
+            exact
+            path="/password/reset/:token"
+            element={<ResetPassword />}
+          />
         </Routes>
         <Footer />
       </Router>
