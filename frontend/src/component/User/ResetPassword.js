@@ -1,32 +1,34 @@
-import React, { Fragment, useRef, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import "./ResetPassword.css";
 import Loader from "../layout/Loader/Loader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, updatePassword } from "../../actions/userAction";
+import { clearErrors, resetPassword } from "../../actions/userAction";
 import { useAlert } from "react-alert";
-import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
 import MetaData from "../layout/MetaData";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
-import VpnKeyIcon from "@mui/icons-material/VpnKey";
 
 const ResetPassword = () => {
+  let { token } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
+  console.log(token);
 
-  const { error, isUpdated, loading } = useSelector((state) => state.profile);
+  const { error, success, loading } = useSelector(
+    (state) => state.forgotPassword
+  );
 
-  const [Password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const updatePasswordSubmit = (e) => {
+  const resetPasswordSubmit = (e) => {
     e.preventDefault();
     const myFrom = new FormData();
-    myFrom.set("Password", Password);
+    myFrom.set("password", password);
     myFrom.set("confirmPassword", confirmPassword);
-    dispatch(updatePassword(myFrom));
+    dispatch(resetPassword(token, myFrom));
   };
 
   useEffect(() => {
@@ -34,14 +36,11 @@ const ResetPassword = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-    if (isUpdated) {
-      alert.success("Password Change Successfuly");
-      navigate("/account");
-      dispatch({
-        type: UPDATE_PASSWORD_RESET,
-      });
+    if (success) {
+      alert.success("Password Updated Successfuly");
+      navigate("/login");
     }
-  }, [dispatch, error, alert, navigate, isUpdated]);
+  }, [dispatch, error, alert, navigate, success]);
   return (
     <Fragment>
       {loading ? (
@@ -49,26 +48,24 @@ const ResetPassword = () => {
       ) : (
         <Fragment>
           <MetaData title="Change Password" />
-          <div className="updatePasswordContainer">
-            <div className="updatePasswordBox">
-              <h2 className="updatePasswordHeading">Update Profile</h2>
+          <div className="resetPasswordContainer">
+            <div className="resetPasswordBox">
+              <h2 className="resetPasswordHeading">Reset Password</h2>
 
               <form
-                className="updatePasswordForm"
-                encType="multipart/form-data"
-                onSubmit={updatePasswordSubmit}
+                className="resetPasswordForm"
+                onSubmit={resetPasswordSubmit}
               >
-                <div className="loginPassword">
+                <div>
                   <LockOpenIcon />
                   <input
                     type="password"
                     placeholder="New Password"
                     required
-                    value={newPassword}
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-
                 <div className="loginPassword">
                   <LockIcon />
                   <input
@@ -82,7 +79,7 @@ const ResetPassword = () => {
                 <input
                   type="submit"
                   value="Update"
-                  className="updatePasswordBtn"
+                  className="resetPasswordBtn"
                 />
               </form>
             </div>
